@@ -33,7 +33,7 @@ const CommentArea = (props) => {
         setComments(comments);
         setIsLoading(false);
         setIsError(false);
-        SetIsFirstLoad(false);
+        setIsFirstLoad(false);
       } else {
         console.log("error");
         setIsLoading(false);
@@ -46,11 +46,14 @@ const CommentArea = (props) => {
     }
   };
 
-  /* componentDidMount() {
+  /*  componentDidMount() {
     console.log("componentDidMount()");
-  }
+  } */
+  useEffect(() => {
+    console.log("componentDidMount()");
+  }, []);
 
-  componentDidUpdate(prevProps) {
+  /*  componentDidUpdate(prevProps) {
     if (prevProps.asin !== this.props.asin) {
       this.fetchComments();
       console.log("siamo in componentDidUpdate e stiamo fetchando");
@@ -58,24 +61,28 @@ const CommentArea = (props) => {
       console.log("siamo in componentDidUpdate ma senza più fetch");
     }
   } */
-
   useEffect(() => {
-    fetchComments();
-  }, [asin]);
+    if (props.asin !== ``) {
+      fetchComments();
+      console.log("siamo in componentDidUpdate e stiamo fetchando");
+    } else {
+      console.log("siamo in componentDidUpdate ma senza più fetch");
+    }
+  }, [props.asin]);
 
   return (
     <div className="text-center">
       <h2>CommentArea</h2>
-      {this.state.isError && <Error />}
-      <AddComment asin={this.props.asin} />
-      {this.state.isLoading && <Loading />}
+      {isError && <Error />}
+      <AddComment asin={props.asin} />
+      {isLoading && <Loading />}
 
-      {!this.state.isLoading && !this.state.isFirstLoad && this.state.comments.length === 0 ? (
+      {!isLoading && !isFirstLoad && comments.length === 0 ? (
         <ListGroup>
           <ListGroup.Item>Non ci sono ancora commenti</ListGroup.Item>
         </ListGroup>
       ) : (
-        <CommentList commentsToShow={this.state.comments} />
+        <CommentList commentsToShow={comments} />
       )}
     </div>
   );
